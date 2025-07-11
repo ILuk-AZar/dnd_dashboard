@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Session Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- Навигация -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">D&D Session Manager</a>
+    <div class="d-flex">
+      <div id="authSection" class="d-flex gap-2">
+        <button id="logoutBtn" class="btn btn-outline-light">Выйти</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <!-- Экран авторизации -->
+  <div id="authScreen">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Вход / Регистрация</h3>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="username" class="form-label">Имя пользователя</label>
+              <input type="text" class="form-control" id="username">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Пароль</label>
+              <input type="password" class="form-control" id="password">
+            </div>
+            <div class="d-grid gap-2">
+              <button id="loginBtn" class="btn btn-primary">Войти</button>
+              <button id="registerBtn" class="btn btn-outline-primary">Зарегистрироваться</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Главный экран -->
+  <div id="mainScreen" class="hidden">
+    <!-- Дашборд -->
+    <div id="dashboardSection">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Ваши комнаты</h2>
+        <button id="createRoomBtn" class="btn btn-success">Создать комнату</button>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+              Комнаты, где вы Мастер
+            </div>
+            <div class="card-body">
+              <ul id="masterRoomsList" class="list-group"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+              Комнаты, где вы Игрок
+            </div>
+            <div class="card-body">
+              <ul id="playerRoomsList" class="list-group"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+          Открытые комнаты для присоединения
+        </div>
+        <div class="card-body">
+          <ul id="openRoomsList" class="list-group"></ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          Мои персонажи
+        </div>
+        <div class="card-body">
+          <div class="d-grid mb-3">
+            <button id="createCharacterGlobalBtn" class="btn btn-success">Создать нового персонажа</button>
+          </div>
+          <div id="globalCharactersContainer" class="row"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Экран комнаты -->
+    <div id="roomSection" class="hidden">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 id="roomTitle"></h2>
+        <div>
+          <button id="backToDashboardBtn" class="btn btn-outline-secondary me-2">Назад</button>
+          <button id="createCharacterBtn" class="btn btn-success">Добавить персонажа</button>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+          Игроки в комнате
+        </div>
+        <div class="card-body">
+          <ul id="playersList" class="list-group"></ul>
+        </div>
+      </div>
+
+      <h3 class="mb-3">Персонажи</h3>
+      <div id="charactersContainer" class="row"></div>
+    </div>
+
+    <!-- Экран персонажа -->
+    <div id="characterSheetSection" class="hidden">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 id="characterNameTitle"></h2>
+        <div>
+          <button id="backFromCharacterSheetBtn" class="btn btn-outline-secondary me-2">Назад</button>
+          <button id="saveCharacterBtn" class="btn btn-primary">Сохранить</button>
+        </div>
+      </div>
+
+      <div class="sheet-section">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="mb-3">
+              <label class="form-label">Имя персонажа</label>
+              <input type="text" class="form-control" id="charName">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Класс</label>
+              <select class="form-select" id="charClass">
+                <option value="barbarian">Варвар</option>
+                <option value="bard">Бард</option>
+                <option value="cleric">Жрец</option>
+                <option value="druid">Друид</option>
+                <option value="fighter">Воин</option>
+                <option value="monk">Монах</option>
+                <option value="paladin">Паладин</option>
+                <option value="ranger">Следопыт</option>
+                <option value="rogue">Плут</option>
+                <option value="sorcerer">Чародей</option>
+                <option value="warlock">Колдун</option>
+                <option value="wizard">Волшебник</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Раса</label>
+              <select class="form-select" id="charRace">
+                <option value="human">Человек</option>
+                <option value="elf">Эльф</option>
+                <option value="dwarf">Дварф</option>
+                <option value="halfling">Полурослик</option>
+                <option value="gnome">Гном</option>
+                <option value="half-elf">Полуэльф</option>
+                <option value="half-orc">Полуорк</option>
+                <option value="tiefling">Тифлинг</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Уровень</label>
+              <input type="number" class="form-control" id="charLevel" min="1" max="20" value="1">
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <h4>Характеристики</h4>
+            <div class="row mb-4">
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-primary text-white mx-auto mb-2" id="strValue">10</div>
+                <label>Сила</label>
+                <input type="number" class="form-control mt-1" id="strInput" min="1" max="30" value="10">
+              </div>
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-success text-white mx-auto mb-2" id="dexValue">10</div>
+                <label>Ловкость</label>
+                <input type="number" class="form-control mt-1" id="dexInput" min="1" max="30" value="10">
+              </div>
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-info text-white mx-auto mb-2" id="conValue">10</div>
+                <label>Телосложение</label>
+                <input type="number" class="form-control mt-1" id="conInput" min="1" max="30" value="10">
+              </div>
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-warning text-dark mx-auto mb-2" id="intValue">10</div>
+                <label>Интеллект</label>
+                <input type="number" class="form-control mt-1" id="intInput" min="1" max="30" value="10">
+              </div>
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-danger text-white mx-auto mb-2" id="wisValue">10</div>
+                <label>Мудрость</label>
+                <input type="number" class="form-control mt-1" id="wisInput" min="1" max="30" value="10">
+              </div>
+              <div class="col-md-2 text-center mb-3">
+                <div class="stat-circle bg-secondary text-white mx-auto mb-2" id="chaValue">10</div>
+                <label>Харизма</label>
+                <input type="number" class="form-control mt-1" id="chaInput" min="1" max="30" value="10">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <h4>Описание</h4>
+                <textarea class="form-control" id="charDescription" rows="5"></textarea>
+              </div>
+              <div class="col-md-6">
+                <h4>Инвентарь</h4>
+                <textarea class="form-control" id="charInventory" rows="5"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Экран выбора персонажа -->
+    <div id="characterSelectionSection" class="hidden">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Выбор персонажа для комнаты</h2>
+        <button id="backToRoomFromSelectionBtn" class="btn btn-outline-secondary">Назад</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          Ваши персонажи
+        </div>
+        <div class="card-body">
+          <div id="characterSelectionContainer" class="row"></div>
+          <div class="mt-3">
+            <button id="createNewCharacterForRoomBtn" class="btn btn-primary">Создать нового персонажа</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно удаления комнаты -->
+<div class="modal fade" id="deleteRoomModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Удаление комнаты</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Вы уверены, что хотите удалить комнату? Все данные будут утеряны.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteRoomBtn">Удалить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

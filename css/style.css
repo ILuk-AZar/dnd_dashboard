@@ -1,0 +1,50 @@
+.character-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+.character-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.stat-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+.sheet-section {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+.hidden {
+    display: none;
+}
+
+/* Новые стили для кнопок */
+.list-group-item {
+    padding: 1rem;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    min-width: 180px; /* Гарантирует место для кнопок */
+}
+
+@media (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+    }
+
+    .button-container .btn {
+        width: 100%;
+    }
+}
